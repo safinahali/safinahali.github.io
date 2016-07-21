@@ -695,7 +695,7 @@
 
                              <h4> Empathy Studies </h4>
 
-                             <p> In order to gain empathy for those with disabilities and to gain a better understanding of the tools they use, we simulated a few common conditions. While empathy studies don't provide accurate insight into disability, we found it helpful to experience things from a different perspective. For example, I blindfolded myself and used VoiceOver (a built in screen reader for Mac) over the course of a week. Being able to gain an understanding of how a screen reader works was invaluable during our design phase.</p>
+                             <p> In order to gain empathy for those with disabilities and to gain a better understanding of the tools they use, we simulated a few common conditions. While empathy studies don't provide accurate insight into disability, we found it helpful to experience things from a different perspective. For example, I wore sound cancelling earplugs to simulate deafness, while using my computer for one week. I observed what I had expected - missing out on notifications. What I did not expect, however, was that I missed out on audio feedback from software such as Skype and Slack, that indicate the system state.</p>
 
                              <img class="img-responsive img-centered" src="img/portfolio/graph-empathy.jpeg" alt="">
 
@@ -756,7 +756,7 @@
 
                             <h4> Usability Testing </h4>
 
-                            <p> For our next round of testing, we focused on user interaction. We took some time to brainstorm out how we would want the user to interact with our next prototypes. I sketched out ideas and weighed our options, which you can see here: </p>
+                            <p> For our next round of testing, we focused on user interaction. We took some time to brainstorm how we would want the user to interact with our next prototypes. We sketched out ideas and weighed our options, which you can see here: </p>
 
                             <img class="img-responsive img-centered" src="img/portfolio/graph-testing.png" alt="">
 
@@ -770,22 +770,41 @@
 
                             <img class="img-responsive img-centered" src="img/portfolio/graph-testing2.jpeg" alt="">
 
-                            <p> For this round of user testing, I used Processing to code our trackpad prototype. I chose Processing because it allowed me to experiment rapidly with code, without a lot of overhead that other languages/IDEs require. When we completed our prototypes, we were able to use the usability lab at Bloomberg to test with 6 participants (plus an additional participant for a pilot round). </p>
+                            <p> For this round of user testing, I built the keyboard interaction to make an HTML web-app with sound. I programmed key patterns in the keys of the Bloomberg keyboard, where each key signified a specific value and certain keys played the stock chart patterns. I wanted to evaluate the interaction of the input medium, and learnability of the data when presented in sound. Our second prototype was built with a track-pad interaction where the user could crub across the device to listen to stock patterns. When we completed our prototypes, we were able to use the usability lab at Bloomberg to test with 6 participants (plus an additional participant for a pilot round). </p>
 
                             <img class="img-responsive img-centered" src="img/portfolio/graph-testing3.png" alt="">
 
-                            <p> We found that scrubbing through a graph was the most accurate interaction, but it wasn't perfect. Participants often were confused about picking up their finger or wondering when they were at the end of the graph or not. From this information we decided to move from a trackpad to a smartphone touch interface. Moving from a relative positioning system (trackpad) to an absolute positioning system (touchscreen) we could overcome these shortcomings. </p>
+                            <p> We found out that both the interactions - keyboard and scrubbing had their advantages and disadvantages. While partcipants preferred using the keyboard interaction due to familiarity and discrete data points, they could recreate graphs more accurately using the scrubbing interface. Participants often were confused about picking up their finger or wondering when they were at the end of the graph or not. We decided to pick the best of both the prototypes and make a combination - an interaction that provides discrete discrete data points, as well as gives full user control. We decided to move from a trackpad to a smartphone touch interface. Moving from a relative positioning system (trackpad) to an absolute positioning system (touchscreen) we could overcome these shortcomings. </p>
 
                             <p> We also found that text-to-speech output took longer to get the gist of the graph, but it was quite accurate. By combining the strengths we saw in each iteration, we moved on to a touchscreen prototype. </p>
 
                             <h4> Prototype Progress </h4>
 
-                            <p> Based on our insights from earlier prototyping sessions, we built an iOS prototype app for both iPhone and iPad. Our prototype is still in progress, but our current iteration can be viewed at the top of the page. </p>
+                            <p> Based on our insights from earlier prototyping sessions, we built an iOS prototype app for both iPhone and iPad. In our first two round of testing with blind participants, we learned that they prefer using the iPhone interface because they have a better sense of space on it, and find the iPad very effort-full to scrub. After 4 rounds of user testing, and iterating, we went through several interactions and gestures. We also added features, such as multi-line interactions, and panning sounds based on the feedback we received from users. Our prototype is still in progress and the current version can be seen on top of the page. </p>
 
-                            <img class="img-responsive img-centered" src="img/portfolio/graph-visual.png" alt="">
+                            <p>From our user research, we had learnt that users with a vision impairment are often helped by other sighted users in performing desktop tasks, especially when there are errors. For this purpose, we decided to build a visual interface to the application. This could also benefit partially sighted users and could extend our application to fully sighted users as well. Some iterations of the visual interface can be seen below.</p>
 
-                            <h4> Next Steps </h4>
-                            <p> We have tested our current prototype with three blind users so far with positive results. We are currently redesigning many of the interactions seen in the video. We will continue iterating on our prototype and present our work to Bloomberg in late July. </p>
+                            <div class = "row">
+                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-visual2.png" alt=""></div>
+                            
+                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-visual.png" alt=""></div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6"><p class = "text-center">Visual Interface iteration 1</p></div>
+                            
+                                <div class="col-lg-6 col-md-6 col-sm-6"><p class = "text-center">Visual Interface iteration 2</p></div>
+                            </div>
+
+                            <div class = "row"><div class="col-lg-2 col-md-2 col-sm-2"></div>
+                            <div class="col-lg-8 col-md-8 col-sm-8"><img class="img-responsive img-centered" src="img/portfolio/graph-interface.png" alt=""></div>
+                            <div class="col-lg-2 col-md-2 col-sm-2"></div></div>
+                            <p class = "text-center">Visual Interface final iteration</p></div>
+
+                            <h4> Evaluation </h4>
+                            <p> We tested our current prototype with four blind users so far with positive results. We received constructive feedback from the users about features that were difficult to understand, and features they found very useful. One user quote that particularly stood out was: <p>  <b><i>"I haven't seen a graph in 20 years. Your product makes it seem so easy."</i></b></p> 
+
+                            <p>We will continue iterating on our prototype and present our work to Bloomberg in late July.</p>
+
+                            <p> <i>There are 39 million people worldwide that are estimated to be blind, and we found 7 blind stock traders. We aren't improving a product used by thousands, but we are creating an opportunity for thousands of people to use graphs. </i></p>
                             
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                         </div>
