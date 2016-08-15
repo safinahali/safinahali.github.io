@@ -50,6 +50,25 @@
 
      </style>   
 
+
+      <script> $(document).ready(function()
+{
+    $(".gif").hover(
+        function()
+        {
+          var src = $(this).attr("src");
+          $(this).attr("src", src.replace(/\.png$/i, ".gif"));
+        },
+        function()
+        {
+          var src = $(this).attr("src");
+          $(this).attr("src", src.replace(/\.gif$/i, ".png"));
+        });
+});
+
+    </script>
+   
+
 </head>
 
 <body id="page-top" class="index">
@@ -693,9 +712,17 @@
                     <div class="col-lg-12 col-lg-offset-0">
                         <div class="modal-body">
                             <!-- Project Details Go Here -->
-                            <h2>Graph Sonification - Making Graphs Accessible</h2>
-                            <p class="item-intro text-muted">Graph sonification is our MHCI Capstone Project at CMU, sponsored by Bloomberg L.P. We are researching accessibility, and creating GUI free audio graphs for the blind (ongoing).</p>
+                            <h2>SONIFY - Graph Sonification to make visual Graphs Accessible</h2>
+                            <p class="item-intro text-muted">Graph sonification was our MHCI Capstone Project at CMU, sponsored by Bloomberg L.P. We researched accessibility in desktop computers, and found pain points in accessing visual content for people with a vision impairment. We prototyped ways of making visual graphs accessible, and built a touchscreen application to sonify visual data such that it is comprehensible to people with a vision impairment.</p>
 
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe src="https://player.vimeo.com/video/176190369"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                <p><a href="https://vimeo.com/176190369">Sonify - Making Price Charts Accessible</a> from <a href="https://vimeo.com/176190369">Safinah Ali</a>.</p>
+                             </div>
+
+                            <br> <br> <p> Our research led us to focus on helping people who are blind hear the contents of a graph through tones. Our current prototype can be seen above. The UI is completely through touch input and audio output. As the user pans left and right a tone is played that represents how high or low the graph is at that given point. People can swipe up and down to change the number of graphs. People can also chose which stock price graphs they wish to listen to (the demo video shows Microsoft Equity Graph and NASDAQ). People can change the range of dates for which they want to listen to the data (week/month/year) and zoom in and out of the graphs. </p>
+
+                            <h3> PROCESS </h3>
                             <img class="img-responsive img-centered" src="img/portfolio/process-diagram.png" alt="">
 
                             <ul class="list-inline">
@@ -709,14 +736,9 @@
 
                             <h3> BACKGROUND </h3>
                             <p>This is a project sponsored by Bloomberg with the goal of improving the accessibility of the Bloomberg Terminal. For the first four months we conducted user research while at Carnegie Mellon University and narrowed down the project space. We are currently designing, prototyping and developing a solution at Bloomberg's headquarters in NYC.</p>
+                     
 
-                            <h3> CURRENT PROTOTYPE </h3>
-                            <p> Our research led us to focus on helping people who are blind hear the contents of a graph through tones. Our current prototype can be seen above. The UI is completely through touch input and audio output. As the user pans left and right a tone is played that represents how high or low the graph is at that given point. It is better heard than seen:</p>
-
-                            <!-- <iframe  width="800" height="440" src="https://www.youtube.com/embed/6UcejWf2qfE" align = "center"allowfullscreen ></iframe> -->
-
-                            <iframe src="https://player.vimeo.com/video/175722797" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                            <p><a href="https://vimeo.com/175722797">Sonify - Making Price Charts Accessible</a> from <a href="https://vimeo.com/176190369">Safinah Ali</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+                            
 
                             <h3> RESEARCH </h3>
 
@@ -819,31 +841,49 @@
 
                             <h4> Prototype Progress </h4>
 
-                            <p> Based on our insights from earlier prototyping sessions, we built an iOS prototype app for both iPhone and iPad. In our first two round of testing with blind participants, we learned that they prefer using the iPhone interface because they have a better sense of space on it, and find the iPad very effort-full to scrub. After 4 rounds of user testing, and iterating, we went through several interactions and gestures. We also added features, such as multi-line interactions, and panning sounds based on the feedback we received from users. Our prototype is still in progress and the current version can be seen on top of the page. </p>
+                            <p> Based on our insights from earlier prototyping sessions, we built an iOS prototype app for both iPhone and iPad. In our first two round of testing with blind participants, we learned that they prefer using the iPhone interface because they have a better sense of space on it, and find the iPad very effort-full to scrub. After 4 rounds of user testing, and iterating, we went through several interactions and gestures. We also added features, such as multi-line interactions, and panning sounds based on the feedback we received from users. </p> <p> One challenge we faced while designing interactions was the clash we were having with existing voice-over interactions. We resolved these in drawing parallels from Apple's voice-over interactions, and using similar gestures. For example, Apple uses a 3-finger tap to get the summary of an element. Another tech challenge we faced was overriding the voice-over control on the application. We initially designed the application such that voice over does not work in it. But this decision received negative feedback as people with a vision impairment rely on voice over for all interactions. Hence we re-designed the application such that voice-over works in the top half of the screen, which contains all the user control, and the bottom half uses the scrubbing gesture for getting the gist of the graph. We designed the three finger interaction to provide a quick summary of the graph. </p> <p>Our prototype is at completion and we are in the process of making it freely available to everyone. </p>
 
-                            <p>From our user research, we had learnt that users with a vision impairment are often helped by other sighted users in performing desktop tasks, especially when there are errors. For this purpose, we decided to build a visual interface to the application. This could also benefit partially sighted users and could extend our application to fully sighted users as well. Some iterations of the visual interface can be seen below.</p>
+                            <p>From our user research, we had learned that users with a vision impairment are often helped by other sighted users in performing desktop tasks, especially when there are errors. For this purpose, we decided to build a visual interface to the application. This could also benefit partially sighted users and could extend our application to fully sighted users as well. Some iterations of the visual interface can be seen below.</p>
 
                             <div class = "row">
-                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-visual2.png" alt=""></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-visual2.png" alt=""><p class = "text-center">Visual Interface iteration 1</p></div>
                             
-                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-visual.png" alt=""></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-visual.png" alt=""><p class = "text-center">Visual Interface iteration 2</p></div>
 
-                                <div class="col-lg-6 col-md-6 col-sm-6"><p class = "text-center">Visual Interface iteration 1</p></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-iter3.png" alt=""><p class = "text-center">Visual Interface iteration 3</p></div>
                             
-                                <div class="col-lg-6 col-md-6 col-sm-6"><p class = "text-center">Visual Interface iteration 2</p></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6"><img class="img-responsive img-centered" src="img/portfolio/graph-iter4.png" alt=""><p class = "text-center">Visual Interface iteration 4</p></div>
+
                             </div>
 
                             <div class = "row"><div class="col-lg-2 col-md-2 col-sm-2"></div>
-                            <div class="col-lg-8 col-md-8 col-sm-8"><img class="img-responsive img-centered" src="img/portfolio/graph-drag.gif" alt=""></div>
+                            <div class="col-lg-8 col-md-8 col-sm-8"><img  class="gif img-responsive img-centered" src="img/portfolio/graph-final.png" alt=""></div>
                             <div class="col-lg-2 col-md-2 col-sm-2"></div></div>
-                            <p class = "text-center">Visual Interface final iteration</p></div>
+                            <p class = "text-center">Visual Interface - final iteration</p></div>
+
+                            <h4> Interactions </h4>
+
+                            <div class = "row">
+                                <div class="col-lg-6 col-md-6 "><img class="gif img-responsive img-centered" src="img/portfolio/drag.gif" alt=""><p class = "text-center">Open the app and drag a finger left and right across the bottom half of the phone screen to play a sonified line. The horizontal movement traverses X-values (dates), and corresponding Y-values (stock prices) are represented through rising and falling pitch.</p></div>
+                            
+                                <div class="col-lg-6 col-md-6 "><img class="img-responsive img-centered" src="img/portfolio/tap.gif" alt=""><p class = "text-center">Tap anywhere on the graph to hear the X and Y values at that point.</p></div>
+                            </div>
+
+                            <div class = "row">
+                                <div class="col-lg-6 col-md-6 "><img class="img-responsive img-centered" src="img/portfolio/swipe.gif" alt=""><p class = "text-center">Interact with the top half of the screen to navigate a menu that is compatible with VoiceOver, Apple's in-built screen reader. Use VoiceOver gestures to navigate the menu to access summary information about the graph, including current price, highs and lows, and date range.</p></div>
+                            
+                                <div class="col-lg-6 col-md-6 "><img class="img-responsive img-centered" src="img/portfolio/single.gif" alt=""><p class = "text-center">Swipe down in the graph section to switch to a second line. Swipe down again to access both lines simultaneously. Each line is represented by a different sound, to distinguish between the two for comparison.</p></div>
+
+                            </div>
 
                             <h4> Evaluation </h4>
-                            <p> We tested our current prototype with four blind users so far with positive results. We received constructive feedback from the users about features that were difficult to understand, and features they found very useful. One user quote that particularly stood out was: <p>  <b><i>"I haven't seen a graph in 20 years. Your product makes it seem so easy."</i></b></p> 
+                            
+                            <p> We tested our current prototype with four blind users so far with positive results. We received constructive feedback from the users about features that were difficult to understand, and features they found very useful. One user quote that particularly stood out was: <p>  <b><i>"It paints a better picture than gong through numbers. I haven't seen graphs in 20 years... but then, by using this app, last time and this time, my ears and my brain is beginning to be like, oh, much easier."</i></b></p> 
 
-                            <p>We will continue iterating on our prototype and present our work to Bloomberg in late July.</p>
+                            <img class="img-responsive img-centered" src="img/portfolio/graph-next.JPG" alt="">
 
-                            <p> <i>There are 39 million people worldwide that are estimated to be blind, and we found 7 blind stock traders. We aren't improving a product used by thousands, but we are creating an opportunity for thousands of people to use graphs. </i></p>
+                           <!--  <p>We will continue iterating on our prototype and present our work to Bloomberg in late July.</p>-->
+                            <p> <i>There are 39 million people worldwide that are estimated to be blind, and we know of only 7 blind stock traders in the world. We aren't improving a product used by thousands, but we are creating an opportunity for millions of people to use graphs. </i></p>
                             
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                         </div>
@@ -1315,10 +1355,10 @@
                             <p> I worked in a team of 5 students from the CMU MHCI program: Jae Won Kim, Jerome Zhong, Michael Anderson, Samarth Bahuguna and Safinah Ali. We all come from a different backgrounds and areas of expertise. My responsibilities included contextual interviews, synthesis, affinity diagram, visioning, ideation and design.</p>
 
                             <h3> Interviews </h3>
-                            <p>Since observing doctors, nurses and staff at UHS wasn’t feasible, our team of 5 conducted student interviews. Our interviewees included 6 students who had previously been to UHS and a Peer Health Advocate (PHA), which is a student position that works with UHS for organizing health education events.</p>
+                            <p>Since observing doctors, nurses and staff at UHS was not feasible, our team of 5 conducted student interviews. Our interviewees included 6 students who had previously been to UHS and a Peer Health Advocate (PHA), which is a student position that works with UHS for organizing health education events.</p>
                             <h3>Modelling and Affinity Diagram</h3>
                             <img class="img-responsive img-centered" src="img/portfolio/responsibilities.png" alt="">
-                            <p> Through team sessions after each interview, we built flow, sequence, and cultural models for each interviewee. We then consolidated the corresponding models into a single flow, sequence and cultural model representing the UHS system. Additionally, we deconstructed them into atomic pieces, and rebundled responsibilities and actions into more logical and meaningful groups.</p><p>Using interview notes, we also built an affinity diagram for an overview of problems being faced by students and UHS.</p>
+                            <p> Through team sessions after each interview, we built flow, sequence, and cultural models for each interviewee. We then consolidated the corresponding models into a single flow, sequence and cultural model representing the UHS system. Additionally, we de-constructed them into atomic pieces, and rebundled responsibilities and actions into more logical and meaningful groups.</p><p>Using interview notes, we also built an affinity diagram for an overview of problems being faced by students and UHS.</p>
                             <img class="img-responsive img-centered" src="img/portfolio/affinity.png" alt="">
 
                             <h3> Walking the Wall </h3>
@@ -1328,10 +1368,11 @@
                             <p> Using the issues and ideas obtained from walking the wall, we proposed visions for a better state of affairs at UHS. Furthermore, we evaluated each vision on the basis of the data collected, technological feasibility and organizational fit. <p>
                             <h3> Storyboard and Speed-dating</h3>
                             <p> The most promising concepts were sketched into storyboards. These were tested with the students we interviewed in the beginning through speed dating. Their reactions and feedback was used to further refine some of these ideas which was followed by more testing.</p>
-                            <h3> Final Concept </h3>
+                            <h3> Final Concept </h3>                         
+                            <p> After several iterations of storyboards, we proposed a concept to address long waiting times at UHS. Our solution comprised of a wait time estimation system that would keep track of waiting times for both scheduled and walk-in appointments. The wait time estimates would be displayed both at UHS and on their website. <b> This is the final concept poster we presented to the Health Services Officials. These are not designs, but concept presentation. </b> </p>
                             <img class="img-responsive img-centered" src="img/portfolio/poster.jpg" alt="">
 
-                            <p> After a few iterations of storyboards, we proposed a concept to address long waiting times at UHS. Our solution comprised of a wait time estimation system that would keep track of waiting times for both scheduled and walk-in appointments. The wait time estimates would be displayed both at UHS and on their website. A poster of our final design was presented to UHS administration. </p>
+                            <p>  The concept was received well by the UHS officials. They expressed concerns about the accuracy of wait time estimates. We resolved these concerns by explaining how live updating the system is feasible and effective.   </p>
 
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                         </div>
@@ -1821,9 +1862,6 @@
                             <p> Two editions of Spark have been distributed in schools in New Delhi and received a positive feedback. We are in the process of creating an e-magazine and online subscription process for further editions. </p>
 
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
-
-
-
                         
                         </div>
                     </div>
@@ -1831,6 +1869,9 @@
             </div>
         </div>
     </div>
+
+
+
 
 
 
