@@ -53,7 +53,7 @@
      </style>   
 
 
-      <script> 
+      <!--script> 
       $(document).ready(function()
 {
     $(".gif").hover(
@@ -69,7 +69,11 @@
         });
 });
 
-    </script>
+      // Closing tab stuff
+
+    </script-->
+
+        <!--script language="javascript" type="text/javascript" src="js/jquery.js"></script-->
    
 
 </head>
@@ -2740,6 +2744,18 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="js/agency.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        $(function(){
+            $('.close-modal').click(function(){
+                console.log("closed");
+                $('iframe').contents().find('video').each(function () {
+                    this.currentTime = 0;
+                    this.pause();
+                });
+            });
+        });
+    </script>
 
 </body>
 
