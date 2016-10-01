@@ -859,7 +859,7 @@
                             <p class="item-intro text-muted">Graph sonification was our MHCI Capstone Project at CMU, sponsored by Bloomberg L.P. We researched accessibility in desktop computers, and found pain points in accessing visual content for people with a vision impairment. We prototyped ways of making visual graphs accessible, and built a touchscreen application to sonify visual data such that it is comprehensible to people with a vision impairment.</p>
 
                             <div class="embed-responsive embed-responsive-16by9">
-                                <iframe src="https://player.vimeo.com/video/176190369"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                <iframe src="https://player.vimeo.com/video/176190369" id="vid-1"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                                 <p><a href="https://vimeo.com/176190369">Sonify - Making Price Charts Accessible</a> from <a href="https://vimeo.com/176190369">Safinah Ali</a>.</p>
                              </div>
 
@@ -2749,9 +2749,12 @@
         $(function(){
             $('.close-modal').click(function(){
                 console.log("closed");
-                $('iframe').contents().find('video').each(function () {
-                    this.currentTime = 0;
-                    this.pause();
+                //var x = document.getElementById("vid-1");
+                //x.src = x.src;
+                $('iframe').each(function() {
+                    var src= $(this).attr('src');
+                    $(this).attr('src',src);
+                    console.log(src);
                 });
             });
         });
