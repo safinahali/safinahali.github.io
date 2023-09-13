@@ -1,3 +1,3 @@
-# Safinah Ali, Interaction Designer
+# Safinah Ali
 
-## Portfolio
+## Website
