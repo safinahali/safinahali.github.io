@@ -1,0 +1,1 @@
+const e="https://genai-lab-6e1e6.web.app",s=["Generative AI","Gen AI Lab","Learning","Lessons","Learning Hub","AI Curriculum"],a="A generative AI literacy website.",t="GenAI Lab",n=`${e}`;export{a as d,n as i,s as k,e as s,t};

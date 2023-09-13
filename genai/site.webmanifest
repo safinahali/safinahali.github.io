@@ -1,0 +1,13 @@
+{
+	"name": "GenAI Lab",
+	"short_name": "Lab",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"type": "image/png"
+		}
+	],
+	"theme_color": "#f9f6fe",
+	"background_color": "#f9f6fe",
+	"display": "standalone"
+}
