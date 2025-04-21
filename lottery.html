@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Distribution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .slider-container {
+            margin: 20px 0;
+        }
+        #amount-display {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>How would you distribute $1 million?</h1>
+    
+    <div class="slider-container">
+        <label for="charity-slider">Amount to Charity: $<span id="charity-amount">500000</span></label>
+        <input type="range" id="charity-slider" min="0" max="1000000" value="500000" step="1000">
+    </div>
+
+    <div id="amount-display">
+        <p>To Charity: $<span id="charity-display">500000</span></p>
+        <p>To Yourself: $<span id="self-display">500000</span></p>
+    </div>
+
+    <script>
+        const charitySlider = document.getElementById('charity-slider');
+        const charityAmount = document.getElementById('charity-amount');
+        const charityDisplay = document.getElementById('charity-display');
+        const selfDisplay = document.getElementById('self-display');
+
+        function updateAmounts() {
+            const charityValue = parseInt(charitySlider.value);
+            const selfValue = 1000000 - charityValue;
+            
+            charityAmount.textContent = charityValue.toLocaleString();
+            charityDisplay.textContent = charityValue.toLocaleString();
+            selfDisplay.textContent = selfValue.toLocaleString();
+        }
+
+        charitySlider.addEventListener('input', updateAmounts);
+        updateAmounts(); // Initialize displays
+    </script>
+
+<style>
+    .chat-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 30px;
+    }
+    .chat-messages {
+        height: 300px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 5px;
+    }
+    .message {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .ai-message {
+        background: #e3f2fd;
+        margin-right: 20%;
+    }
+    .user-message {
+        background: #f5f5f5;
+        margin-left: 20%;
+    }
+    .chat-input {
+        display: flex;
+        gap: 10px;
+    }
+    #user-input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    #send-button {
+        padding: 10px 20px;
+        background: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #send-button:hover {
+        background: #1976D2;
+    }
+</style>
+
+<div class="chat-container">
+    <h2>Chat with AI Advisor</h2>
+    <div class="chat-messages" id="chat-messages">
+        <div class="message ai-message">
+            I notice you're planning to give $<span id="ai-charity-amount">500000</span> to charity. 
+            I'd love to discuss your thought process and perhaps explore different ways to maximize the impact of your donation. 
+            What causes are you most passionate about?
+        </div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="Type your message here...">
+        <button id="send-button">Send</button>
+    </div>
+</div>
+
+<script>
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const aiCharityAmount = document.getElementById('ai-charity-amount');
+
+    function updateAIMessage() {
+        aiCharityAmount.textContent = charityDisplay.textContent;
+    }
+
+    function addMessage(message, isAI) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isAI ? 'ai-message' : 'user-message'}`;
+        messageDiv.textContent = message;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function generateAIResponse(userMessage) {
+        const charityAmt = parseInt(charityDisplay.textContent.replace(/,/g, ''));
+        let response;
+
+        if (charityAmt < 300000) {
+            response = "I understand the desire to keep more for yourself, but consider that even a small increase in charitable giving could significantly impact many lives. What's holding you back from giving more?";
+        } else if (charityAmt < 700000) {
+            response = "That's a generous amount! Have you considered specific charitable organizations that align with your values? We could discuss how to maximize the impact of your donation.";
+        } else {
+            response = "Your generosity is truly remarkable! To make sure your donation has the maximum impact, would you like to discuss effective altruism and evidence-based giving strategies?";
+        }
+
+        return response;
+    }
+
+    function handleUserMessage() {
+        const message = userInput.value.trim();
+        if (message) {
+            addMessage(message, false);
+            userInput.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const aiResponse = generateAIResponse(message);
+                addMessage(aiResponse, true);
+            }, 1000);
+        }
+    }
+
+    sendButton.addEventListener('click', handleUserMessage);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleUserMessage();
+        }
+    });
+    charitySlider.addEventListener('input', updateAIMessage);
+</script>
+</body>
+</html>
+
+    
