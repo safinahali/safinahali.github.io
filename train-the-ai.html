@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Train the AI! 🤖</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow:    #FFD93D;
+    --yellow-dk: #C9A800;
+    --coral:     #FF6B6B;
+    --coral-dk:  #C93B3B;
+    --mint:      #6BCB77;
+    --mint-dk:   #2E8A38;
+    --sky:       #4D96FF;
+    --sky-dk:    #1A5FCC;
+    --purple:    #C77DFF;
+    --purple-dk: #7B2FBE;
+    --bg:        #F7F4FF;
+    --card:      #FFFFFF;
+    --text:      #1E1B4B;
+    --muted:     #6B6B8A;
+    --radius:    20px;
+    --radius-sm: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #6BCB77 0%, #4D96FF 50%, #C77DFF 100%);
+    padding: 28px 24px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='rgba(255,255,255,0.12)' stroke-width='2'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+  }
+  .header-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(32px, 8vw, 52px);
+    color: #fff;
+    letter-spacing: 1px;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    position: relative;
+  }
+  .header-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.92);
+    margin-top: 6px;
+    font-weight: 600;
+    position: relative;
+  }
+  .robot-big {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 8px;
+    animation: bob 2.5s ease-in-out infinite;
+    position: relative;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ── Phase tabs ── */
+  .phase-strip {
+    background: var(--card);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.06);
+    display: flex;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .phase-tab {
+    flex: 1;
+    padding: 14px 8px 12px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .phase-tab .tab-icon { font-size: 22px; }
+  .phase-tab.active-sft  { background: #FFF5F5; color: var(--coral-dk); }
+  .phase-tab.active-rlhf { background: #F0FFF4; color: var(--mint-dk);  }
+  .phase-tab.active-sft::after,
+  .phase-tab.active-rlhf::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 4px 4px 0 0;
+  }
+  .phase-tab.active-sft::after  { background: var(--coral); }
+  .phase-tab.active-rlhf::after { background: var(--mint); }
+
+  /* ── Main content ── */
+  .main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  /* ── Progress ── */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 12px;
+    background: #E8E4FF;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--sky), var(--purple));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .stars-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .star { font-size: 20px; transition: transform 0.3s; }
+  .star.earned { animation: starPop 0.4s ease; }
+  @keyframes starPop {
+    0%   { transform: scale(0); }
+    60%  { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  /* ── Phase intro banner ── */
+  .intro-banner {
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    font-weight: 600;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .intro-banner.sft  { background: #FFF0F0; color: #7A1F1F; border: 2.5px solid #FFBABA; }
+  .intro-banner.rlhf { background: #EDFFF1; color: #1A5C26; border: 2.5px solid #A8EDB4; }
+  .intro-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── Question card ── */
+  .q-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px 20px 20px;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.07), 0 2px 12px rgba(0,0,0,0.05);
+    margin-bottom: 16px;
+  }
+  .q-robot {
+    font-size: 44px;
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+    animation: bob 2.5s ease-in-out infinite;
+  }
+  .q-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 99px;
+    margin-bottom: 10px;
+  }
+  .q-badge.sft  { background: #FFD7D7; color: #8B1A1A; }
+  .q-badge.rlhf { background: #C9F5D4; color: #1A5C26; }
+  .q-text {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(17px, 4vw, 21px);
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.35;
+  }
+  .q-context {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  /* ── SFT Options ── */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #F7F4FF;
+    border: 2.5px solid #DDD8FF;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    line-height: 1.5;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--sky);
+    background: #EEF5FF;
+    transform: translateY(-2px);
+  }
+  .opt-btn:active:not(:disabled) { transform: scale(0.98); }
+  .opt-letter {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #DDD8FF;
+    color: var(--purple-dk);
+    font-size: 13px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: 'Fredoka One', cursive;
+  }
+  .opt-btn.correct {
+    background: #EDFFF1;
+    border-color: var(--mint);
+    color: #1A5C26;
+  }
+  .opt-btn.correct .opt-letter { background: var(--mint); color: #fff; }
+  .opt-btn.wrong {
+    background: #FFF0F0;
+    border-color: var(--coral);
+    color: #7A1F1F;
+  }
+  .opt-btn.wrong .opt-letter { background: var(--coral); color: #fff; }
+  .opt-btn:disabled { cursor: default; transform: none !important; }
+
+  /* ── Feedback box ── */
+  .feedback {
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.6;
+    margin-top: 16px;
+    display: none;
+    animation: slideUp 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .feedback.good { background: #EDFFF1; color: #1A5C26; border: 2px solid var(--mint); }
+  .feedback.bad  { background: #FFF0F0; color: #7A1F1F; border: 2px solid var(--coral); }
+
+  /* ── RLHF Ranking ── */
+  .tip-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFF8E1;
+    border: 2px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #7A5C00;
+    margin-bottom: 14px;
+  }
+  .rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .rank-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #F7F4FF;
+    border: 2.5px solid #DDD8FF;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: grab;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .rank-item:hover { border-color: var(--purple); box-shadow: 0 4px 0 rgba(199,125,255,0.2); }
+  .rank-item.dragging { opacity: 0.4; }
+  .rank-item.drag-over { border-color: var(--sky); background: #EEF5FF; box-shadow: 0 4px 0 rgba(77,150,255,0.2); }
+  .rank-num {
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: #fff;
+    font-family: 'Fredoka One', cursive;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .drag-handle { color: var(--muted); font-size: 18px; flex-shrink: 0; margin-top: 4px; }
+
+  /* ── Buttons ── */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: var(--radius-sm);
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-top: 12px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-check {
+    background: var(--yellow);
+    color: #5A3E00;
+    box-shadow: 0 5px 0 var(--yellow-dk);
+  }
+  .btn-check:hover { box-shadow: 0 3px 0 var(--yellow-dk); transform: translateY(2px); }
+  .btn-next {
+    background: var(--sky);
+    color: #fff;
+    box-shadow: 0 5px 0 var(--sky-dk);
+    display: none;
+  }
+  .btn-next:hover { box-shadow: 0 3px 0 var(--sky-dk); transform: translateY(2px); }
+  .btn-next.show { display: block; }
+  .btn-restart {
+    background: var(--coral);
+    color: #fff;
+    box-shadow: 0 5px 0 var(--coral-dk);
+    margin-top: 16px;
+  }
+  .btn-restart:hover { box-shadow: 0 3px 0 var(--coral-dk); transform: translateY(2px); }
+
+  /* ── End screen ── */
+  .end-wrap {
+    text-align: center;
+    padding: 12px 0 24px;
+  }
+  .end-trophy { font-size: 72px; margin-bottom: 12px; display: block; animation: bob 2s ease-in-out infinite; }
+  .end-heading {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .end-score-big {
+    font-family: 'Fredoka One', cursive;
+    font-size: 64px;
+    background: linear-gradient(135deg, var(--coral), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin: 4px 0;
+  }
+  .end-pts { font-size: 14px; color: var(--muted); font-weight: 700; margin-bottom: 16px; }
+  .end-msg-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.06);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .recap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .recap-chip {
+    border-radius: var(--radius-sm);
+    padding: 14px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .recap-chip.sft  { background: #FFF0F0; color: #7A1F1F; border: 2px solid #FFBABA; }
+  .recap-chip.rlhf { background: #EDFFF1; color: #1A5C26; border: 2px solid #A8EDB4; }
+  .recap-chip-title { font-family: 'Fredoka One', cursive; font-size: 16px; display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <span class="robot-big">🤖</span>
+  <div class="header-title">Train the AI!</div>
+  <div class="header-sub">Teach a robot how to be helpful</div>
+</div>
+
+<!-- Phase tabs -->
+<div class="phase-strip" id="phase-strip">
+  <button class="phase-tab" id="tab-sft" onclick="switchTab('sft')">
+    <span class="tab-icon">📚</span>
+    Phase 1: Teach
+  </button>
+  <button class="phase-tab" id="tab-rlhf" onclick="switchTab('rlhf')">
+    <span class="tab-icon">⭐</span>
+    Phase 2: Rate
+  </button>
+</div>
+
+<!-- Main -->
+<div class="main" id="main"></div>
+
+<script>
+const PHASES = {
+  sft: {
+    introIcon: '📚',
+    introBadge: 'sft',
+    intro: 'You are the teacher! Pick the BEST answer to show the robot. It learns by copying what you choose!',
+    questions: [
+      {
+        robot: '🤔',
+        badge: 'SFT',
+        q: "Someone asks: \"What's 2 + 2?\"",
+        context: "Pick the best answer to teach the robot:",
+        options: [
+          { text: "The answer is 4! Adding two groups of 2 together makes 4.", correct: true },
+          { text: "Hmm, maybe 5? I'm not sure about math.", correct: false },
+          { text: "That's a silly question. Figure it out yourself!", correct: false },
+          { text: "Numbers are weird and confusing.", correct: false },
+        ],
+        goodFB: "🎉 Great choice! You showed the robot a clear and friendly answer. That's how you teach it — with good examples!",
+        badFB: "Oops! The robot will copy you, so you want to give it a helpful and correct answer. Try again!"
+      },
+      {
+        robot: '😅',
+        badge: 'SFT',
+        q: "Someone says: \"I spilled juice on my homework!\"",
+        context: "What should the robot say? Pick the best response:",
+        options: [
+          { text: "Ugh, how did you do that?!", correct: false },
+          { text: "Oh no! Try letting it dry, then trace over the words. You've got this! 💪", correct: true },
+          { text: "That's your problem, not mine.", correct: false },
+          { text: "Juice is a liquid made from fruit.", correct: false },
+        ],
+        goodFB: "🌟 Perfect! Kind AND helpful! The robot learns that being friendly matters just as much as being smart.",
+        badFB: "Hmm, that answer isn't very kind or helpful. Remember — you're teaching the robot how to be a good helper!"
+      },
+      {
+        robot: '🧐',
+        badge: 'SFT',
+        q: "A little kid asks: \"Why is the sky blue?\"",
+        context: "The robot needs to learn how to explain things in a simple way. Which answer is best?",
+        options: [
+          { text: "Rayleigh scattering causes shorter wavelength light to diffuse through the atmosphere.", correct: false },
+          { text: "Sunlight has lots of colors mixed in! When it hits the air, the blue color bounces around the most — that's what we see!", correct: true },
+          { text: "It just is.", correct: false },
+          { text: "Ask your teacher.", correct: false },
+        ],
+        goodFB: "✨ Brilliant! Simple words, fun explanation! You taught the robot to talk the right way for its audience. Scientists call this 'calibrating to the user'!",
+        badFB: "That answer might be too complicated (or too short) for a little kid. A good teacher knows how to make things easy to understand!"
+      },
+    ]
+  },
+  rlhf: {
+    introIcon: '⭐',
+    introBadge: 'rlhf',
+    intro: 'Now the robot wrote a few answers. Drag them in order from BEST (top) to WORST (bottom). The robot learns from what you prefer!',
+    questions: [
+      {
+        robot: '🤖',
+        badge: 'RLHF',
+        q: "Someone asked: \"How do I make a new friend?\"",
+        context: "Drag these robot answers from best 👑 to worst 👎:",
+        responses: [
+          { id: 'a1', text: "Try joining a club or class you enjoy — it's easier to talk to people when you already like the same things! 😊", ideal: 1 },
+          { id: 'a2', text: "Friends are overrated. Just be alone forever.", ideal: 4 },
+          { id: 'a3', text: "Walk up to someone at lunch and say hi! It might feel scary, but most people are happy when someone talks to them.", ideal: 2 },
+          { id: 'a4', text: "You could try talking to people, or not. Whatever.", ideal: 3 },
+        ],
+        goodFB: "⭐ Nice ranking! You taught the robot that warm, helpful answers beat lazy or mean ones. When LOTS of people rank answers like you did, the robot gets really good at knowing what's helpful!",
+        tip: "Fun fact: Real AI companies have thousands of people rating answers to teach their AI!"
+      },
+      {
+        robot: '🤖',
+        badge: 'RLHF',
+        q: "Someone asked: \"Should I eat candy for every meal?\"",
+        context: "Rank these from best 👑 to worst 👎:",
+        responses: [
+          { id: 'b1', text: "Candy is yummy but your body needs other foods too — like fruits, veggies, and protein — to grow strong! Treats are great sometimes. 🍎", ideal: 1 },
+          { id: 'b2', text: "YES! Candy forever! Best idea ever! 🍬🍭🍫", ideal: 4 },
+          { id: 'b3', text: "Candy has sugar for energy, but no vitamins or protein. Maybe candy as a treat and real food for meals?", ideal: 2 },
+          { id: 'b4', text: "I cannot answer questions about food. Please ask a doctor.", ideal: 3 },
+        ],
+        goodFB: "🌟 Great job! You showed the robot: be honest AND friendly. Just agreeing with everything (even a bad idea!) is NOT a good answer — even if it sounds fun!",
+        tip: "This is called avoiding 'sycophancy' — that's a fancy word for always saying what people WANT to hear instead of what's TRUE!"
+      },
+      {
+        robot: '🤖',
+        badge: 'RLHF',
+        q: "A student asked the robot to write a short poem about rain.",
+        context: "Rank these poems from best 👑 to worst 👎:",
+        responses: [
+          { id: 'c1', text: "Raindrops tap the windowpane,\nA silver curtain softly falls,\nThe earth wakes up and blooms again —\nNature answers when rain calls. 🌧️", ideal: 1 },
+          { id: 'c2', text: "Rain is water that falls. It is wet. The end.", ideal: 4 },
+          { id: 'c3', text: "Grey clouds weep their silver tears,\nWashing away worries and fears. 🌈", ideal: 2 },
+          { id: 'c4', text: "Rain is precipitation caused by condensation of water vapor in clouds, which then falls due to gravity.", ideal: 3 },
+        ],
+        goodFB: "🎨 Awesome! You taught the robot that creative tasks should actually be creative — with vivid images and feelings, not just definitions. This is super hard to teach with rules alone, which is exactly why RLHF is so useful!",
+        tip: "It's really hard to write a rule that says 'be creative' — but you know a great poem when you read one. RLHF captures THAT feeling!"
+      },
+    ]
+  }
+};
+
+let phase = 'sft';
+let qIdx = 0;
+let score = 0;
+let answered = false;
+let dragSrc = null;
+let totalQ = PHASES.sft.questions.length + PHASES.rlhf.questions.length;
+
+function globalIdx() {
+  return phase === 'sft' ? qIdx : PHASES.sft.questions.length + qIdx;
+}
+
+function switchTab(p) {
+  if (p === phase) return;
+  phase = p; qIdx = 0; answered = false;
+  if (p === 'sft') score = 0;
+  render();
+}
+
+function render() {
+  updateTabs();
+  const main = document.getElementById('main');
+  if (phase === 'done') { renderEnd(main); return; }
+  const pd = PHASES[phase];
+  const q = pd.questions[qIdx];
+  const gIdx = globalIdx();
+  const pct = Math.round((gIdx / totalQ) * 100);
+
+  // Stars row
+  let starsHtml = '';
+  for (let i = 0; i < totalQ; i++) {
+    starsHtml += `<span class="star" id="star-${i}">${i < score ? '⭐' : '☆'}</span>`;
+  }
+
+  const isSFT = phase === 'sft';
+
+  let contentHtml = '';
+  if (isSFT) {
+    contentHtml = renderSFT(q);
+  } else {
+    contentHtml = renderRLHF(q);
+  }
+
+  main.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>Question ${gIdx + 1} of ${totalQ}</span>
+        <span>${score} ⭐ earned</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="stars-row">${starsHtml}</div>
+    </div>
+
+    <div class="intro-banner ${isSFT ? 'sft' : 'rlhf'}">
+      <span class="intro-icon">${pd.introIcon}</span>
+      <div>${pd.intro}</div>
+    </div>
+
+    ${contentHtml}
+  `;
+
+  if (!isSFT) setupDrag();
+}
+
+function renderSFT(q) {
+  const letters = ['A', 'B', 'C', 'D'];
+  return `
+    <div class="q-card">
+      <span class="q-robot">${q.robot}</span>
+      <span class="q-badge sft">📚 Teach the Robot</span>
+      <div class="q-text">${q.q}</div>
+      <div class="q-context">${q.context}</div>
+      <div class="options" id="options">
+        ${q.options.map((o, i) => `
+          <button class="opt-btn" onclick="pickSFT(${i})" id="opt-${i}">
+            <span class="opt-letter">${letters[i]}</span>
+            <span>${o.text}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb"></div>
+    </div>
+    <button class="btn btn-next" id="next-btn" onclick="nextQ()">Next up →</button>
+  `;
+}
+
+function renderRLHF(q) {
+  const shuffled = [...q.responses].sort(() => Math.random() - 0.5);
+  return `
+    <div class="q-card">
+      <span class="q-robot">${q.robot}</span>
+      <span class="q-badge rlhf">⭐ Rate the Robot</span>
+      <div class="q-text">${q.q}</div>
+      <div class="q-context">${q.context}</div>
+      <div class="tip-chip">
+        ☝️ Drag cards up & down to rank them — best answer goes on TOP!
+      </div>
+      <div class="rank-list" id="rank-list">
+        ${shuffled.map((r, i) => `
+          <div class="rank-item" id="${r.id}" draggable="true">
+            <span class="rank-num" id="num-${r.id}">#${i+1}</span>
+            <span class="drag-handle">⠿</span>
+            <span>${r.text}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb"></div>
+    </div>
+    <button class="btn btn-check" id="check-btn" onclick="checkRLHF()">Check my ranking! 🔍</button>
+    <button class="btn btn-next" id="next-btn" onclick="nextQ()">Next up →</button>
+  `;
+}
+
+function pickSFT(i) {
+  if (answered) return;
+  answered = true;
+  const q = PHASES.sft.questions[qIdx];
+  const correct = q.options[i].correct;
+  document.querySelectorAll('.opt-btn').forEach((btn, idx) => {
+    btn.disabled = true;
+    if (idx === i) btn.classList.add(correct ? 'correct' : 'wrong');
+    if (q.options[idx].correct && idx !== i) btn.classList.add('correct');
+  });
+  const fb = document.getElementById('fb');
+  fb.className = `feedback show ${correct ? 'good' : 'bad'}`;
+  fb.innerHTML = correct ? q.goodFB : q.badFB;
+  if (correct) {
+    score++;
+    animateStar();
+  }
+  const nb = document.getElementById('next-btn');
+  if (nb) nb.classList.add('show');
+}
+
+function animateStar() {
+  const idx = score - 1;
+  const star = document.getElementById(`star-${idx}`);
+  if (star) {
+    star.textContent = '⭐';
+    star.classList.add('earned');
+    setTimeout(() => star.classList.remove('earned'), 400);
+  }
+}
+
+function setupDrag() {
+  const list = document.getElementById('rank-list');
+  if (!list) return;
+  updateNums();
+
+  list.querySelectorAll('.rank-item').forEach(item => {
+    item.addEventListener('dragstart', e => {
+      dragSrc = item;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      list.querySelectorAll('.rank-item').forEach(i => i.classList.remove('drag-over'));
+      updateNums();
+    });
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (item !== dragSrc) {
+        list.querySelectorAll('.rank-item').forEach(i => i.classList.remove('drag-over'));
+        item.classList.add('drag-over');
+      }
+    });
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrc && dragSrc !== item) {
+        const all = [...list.querySelectorAll('.rank-item')];
+        if (all.indexOf(dragSrc) < all.indexOf(item)) list.insertBefore(dragSrc, item.nextSibling);
+        else list.insertBefore(dragSrc, item);
+        updateNums();
+      }
+    });
+
+    // Touch
+    let touchClone = null, touchSrc = null;
+    item.addEventListener('touchstart', e => {
+      touchSrc = item;
+      touchClone = item.cloneNode(true);
+      touchClone.style.cssText = `position:fixed;opacity:0.75;pointer-events:none;width:${item.offsetWidth}px;z-index:999;border-radius:12px;`;
+      document.body.appendChild(touchClone);
+    }, { passive: true });
+    item.addEventListener('touchmove', e => {
+      if (!touchClone) return;
+      const t = e.touches[0];
+      touchClone.style.left = (t.clientX - touchClone.offsetWidth / 2) + 'px';
+      touchClone.style.top  = (t.clientY - 40) + 'px';
+      const el = document.elementFromPoint(t.clientX, t.clientY);
+      if (el) {
+        const target = el.closest('.rank-item');
+        if (target && target !== touchSrc) {
+          list.querySelectorAll('.rank-item').forEach(i => i.classList.remove('drag-over'));
+          target.classList.add('drag-over');
+        }
+      }
+    }, { passive: true });
+    item.addEventListener('touchend', e => {
+      if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
+      const t = e.changedTouches[0];
+      const el = document.elementFromPoint(t.clientX, t.clientY);
+      if (el && touchSrc) {
+        const target = el.closest('.rank-item');
+        if (target && target !== touchSrc) {
+          const all = [...list.querySelectorAll('.rank-item')];
+          if (all.indexOf(touchSrc) < all.indexOf(target)) list.insertBefore(touchSrc, target.nextSibling);
+          else list.insertBefore(touchSrc, target);
+        }
+      }
+      list.querySelectorAll('.rank-item').forEach(i => i.classList.remove('drag-over'));
+      updateNums();
+      touchSrc = null;
+    }, { passive: true });
+  });
+}
+
+function updateNums() {
+  const list = document.getElementById('rank-list');
+  if (!list) return;
+  list.querySelectorAll('.rank-item').forEach((item, i) => {
+    const num = item.querySelector('.rank-num');
+    if (num) num.textContent = '#' + (i + 1);
+  });
+}
+
+function checkRLHF() {
+  const q = PHASES.rlhf.questions[qIdx];
+  const list = document.getElementById('rank-list');
+  const order = [...list.querySelectorAll('.rank-item')].map(el => el.id);
+  const ideal = [...q.responses].sort((a, b) => a.ideal - b.ideal).map(r => r.id);
+  let matches = order.filter((id, i) => id === ideal[i]).length;
+  const pts = Math.round(matches / 2);
+  score += pts;
+  for (let i = 0; i < pts; i++) animateStar();
+
+  const fb = document.getElementById('fb');
+  fb.className = 'feedback show good';
+  fb.innerHTML = `${matches === 4 ? '🎯 Perfect!' : matches >= 2 ? '👍 Nice ranking!' : '🤔 Interesting!'} You matched ${matches} out of 4 positions.<br><br>${q.goodFB}${q.tip ? `<br><br><em>💡 ${q.tip}</em>` : ''}`;
+
+  document.getElementById('check-btn').style.display = 'none';
+  list.querySelectorAll('.rank-item').forEach(i => { i.draggable = false; i.style.cursor = 'default'; });
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQ() {
+  answered = false;
+  const pd = PHASES[phase];
+  if (qIdx < pd.questions.length - 1) {
+    qIdx++;
+    render();
+  } else if (phase === 'sft') {
+    phase = 'rlhf'; qIdx = 0; render();
+  } else {
+    phase = 'done'; render();
+  }
+}
+
+function updateTabs() {
+  const tSft  = document.getElementById('tab-sft');
+  const tRlhf = document.getElementById('tab-rlhf');
+  if (!tSft || !tRlhf) return;
+  tSft.className  = 'phase-tab' + (phase === 'sft'  ? ' active-sft'  : '');
+  tRlhf.className = 'phase-tab' + (phase === 'rlhf' ? ' active-rlhf' : '');
+}
+
+function renderEnd(main) {
+  updateTabs();
+  const maxScore = totalQ + PHASES.rlhf.questions.length;
+  const pct = Math.round((score / maxScore) * 100);
+  const trophy = pct >= 75 ? '🏆' : pct >= 50 ? '🎉' : '💡';
+  const heading = pct >= 75 ? "You're an AI Trainer!" : pct >= 50 ? "Great job!" : "Nice try!";
+  const msg = pct >= 75
+    ? "Wow! You really understand how AI learns. You showed it good examples AND rated answers like a pro. That's exactly how real AI is trained!"
+    : pct >= 50
+    ? "You got the big ideas! In real life, AI companies use thousands of people doing exactly what you just did. You'd fit right in!"
+    : "You gave it a great shot! Remember: SFT means showing the AI good examples, and rating means telling it which answers feel better. These two steps make AI smarter!";
+
+  main.innerHTML = `
+    <div class="end-wrap">
+      <span class="end-trophy">${trophy}</span>
+      <div class="end-heading">${heading}</div>
+      <span class="end-score-big">${score}</span>
+      <div class="end-pts">stars earned out of ${maxScore}</div>
+
+      <div class="end-msg-card">
+        ${msg}
+        <div class="recap-grid">
+          <div class="recap-chip sft">
+            <span class="recap-chip-title">📚 Phase 1: SFT</span>
+            Show the AI good examples. It learns by copying!
+          </div>
+          <div class="recap-chip rlhf">
+            <span class="recap-chip-title">⭐ Phase 2: RLHF</span>
+            Rate AI answers. It learns what people like!
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-restart" onclick="restart()">🔄 Play Again!</button>
+    </div>
+  `;
+}
+
+function restart() {
+  phase = 'sft'; qIdx = 0; score = 0; answered = false;
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
